@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="方思照 — 无人机技术 × 新媒体运营 双栖实践者。个人在线名片，展示专业背景、技能与作品。">
+  <meta name="keywords" content="方思照,无人机,航测,抖音运营,新媒体,个人网站,Bootstrap">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%233B82F6'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='18' font-family='sans-serif' font-weight='bold'>方</text></svg>">
+  <title>方思照 | 无人机 × 新媒体 双栖实践者</title>
+
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- 自定义样式 -->
+  <link href="assets/css/style.css" rel="stylesheet">
+</head>
+<body data-bs-spy="scroll" data-bs-target="#mainNav" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" tabindex="0">
+
+  <!-- 滚动进度条 -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- ========== 导航栏 ========== -->
+  <nav id="mainNav" class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#hero">
+        <span class="brand-icon">FS</span> 方思照
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="切换导航">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+          <li class="nav-item"><a class="nav-link" href="#about">关于</a></li>
+          <li class="nav-item"><a class="nav-link" href="#skills">技能</a></li>
+          <li class="nav-item"><a class="nav-link" href="#experience">经历</a></li>
+          <li class="nav-item"><a class="nav-link" href="#portfolio">作品</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">联系</a></li>
+          <li class="nav-item ms-lg-2">
+            <button id="themeToggle" class="btn btn-sm theme-toggle" title="切换明暗主题" aria-label="切换明暗主题">
+              <i class="bi bi-sun-fill"></i>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========== Hero 区域 ========== -->
+  <section id="hero" class="hero-section d-flex align-items-center min-vh-100">
+    <!-- 粒子画布 -->
+    <canvas id="particleCanvas" aria-hidden="true"></canvas>
+    <!-- 动态光晕 -->
+    <div class="hero-glow-1" aria-hidden="true"></div>
+    <div class="hero-glow-2" aria-hidden="true"></div>
+    <div class="container text-center position-relative">
+      <div class="hero-avatar mx-auto mb-4">
+        <div class="avatar-placeholder rounded-circle d-flex align-items-center justify-content-center mx-auto">
+          <span class="display-4 fw-bold">方</span>
+        </div>
+      </div>
+      <h1 class="display-3 fw-bold mb-2 hero-name">方思照</h1>
+      <div class="hero-subtitle mb-4">
+        <span class="fs-4 fw-light typing-text" id="typingText"></span>
+        <span class="typing-cursor">|</span>
+      </div>
+      <p class="lead text-secondary mb-5 mx-auto" style="max-width:600px;">
+        三年无人机测绘实操 + 两年抖音本地生活运营<br>
+        用技术驱动增长，以数据丈量世界
+      </p>
+      <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <a href="#portfolio" class="btn btn-primary btn-lg px-4">
+          <i class="bi bi-play-circle me-2"></i>查看作品
+        </a>
+        <a href="#contact" class="btn btn-outline-light btn-lg px-4">
+          <i class="bi bi-envelope me-2"></i>联系我
+        </a>
+      </div>
+      <div class="mt-5">
+        <a href="#about" class="scroll-indicator" aria-label="向下滚动">
+          <i class="bi bi-chevron-down"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 关于我 ========== -->
+  <section id="about" class="section-padding reveal">
+    <div class="container">
+      <div class="section-header text-center mb-4">
+        <span class="section-tag">ABOUT</span>
+        <h2 class="section-title">关于我</h2>
+        <p class="section-subtitle">技术是骨骼，运营是血肉——我在这两个世界里自由穿行</p>
+      </div>
+
+      <div class="row g-5 align-items-center">
+        <!-- 左侧：个人简介 -->
+        <div class="col-lg-7">
+          <div class="about-card p-4 p-lg-5 rounded-4">
+            <p class="fs-5 lh-lg mb-4">
+              我是<span class="text-highlight">方思照</span>，2002 年生于湖北恩施。
+              从长江大学工程技术学院无人机应用技术专业出发，
+              在航测外业的烈日下学会了精确，在抖音运营的流量里领悟了洞察。
+            </p>
+            <p class="lh-lg mb-4">
+              大学期间，我操控大疆精灵 4 RTK 完成了建始蛇皮洞水库、崔家坝农村土地确权等项目的航测任务，
+              累计飞行 36 架次，独立完成 6 个地块的实地测绘。这段经历塑造了我对<span class="text-highlight">数据精度</span>的苛刻追求。
+            </p>
+            <p class="lh-lg mb-0">
+              2024 年加入咿呀英博集团后，我从天空转战屏幕——主导抖音本地推广项目组的架构建设，
+              日均响应 50+ 平台咨询，处理投诉纠纷 300+ 起，客户满意度稳定在 96% 以上。
+              通过数据分析驱动的策略优化，推动本地门店到店量<span class="text-highlight">提升 32%</span>。
+            </p>
+          </div>
+        </div>
+
+        <!-- 右侧：核心数据 -->
+        <div class="col-lg-5">
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="stat-card rounded-4 p-4 text-center">
+                <div class="stat-number text-primary">36<span class="fs-6">+</span></div>
+                <div class="stat-label">无人机航测架次</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="stat-card rounded-4 p-4 text-center">
+                <div class="stat-number text-primary">32<span class="fs-6">%</span></div>
+                <div class="stat-label">门店到店量提升</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="stat-card rounded-4 p-4 text-center">
+                <div class="stat-number text-primary">300<span class="fs-6">+</span></div>
+                <div class="stat-label">纠纷妥善处理</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="stat-card rounded-4 p-4 text-center">
+                <div class="stat-number text-primary">96<span class="fs-6">%</span></div>
+                <div class="stat-label">客户满意度</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 技能雷达 ========== -->
+  <section id="skills" class="section-padding reveal">
+    <div class="container">
+      <div class="section-header text-center mb-4">
+        <span class="section-tag">SKILLS</span>
+        <h2 class="section-title">专业技能</h2>
+        <p class="section-subtitle">横跨无人机测绘、新媒体运营与视觉设计三大领域</p>
+      </div>
+      <div class="section-divider"></div>
+
+      <div class="row g-4">
+        <!-- 无人机测绘 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="skill-category-card rounded-4 p-4 h-100">
+            <div class="skill-icon-wrapper mb-3">
+              <i class="bi bi-geo-alt-fill"></i>
+            </div>
+            <h3 class="skill-category-title mb-3">🛸 无人机与测绘</h3>
+            <div class="skill-tags">
+              <span class="skill-tag tech">大疆精灵 4 RTK</span>
+              <span class="skill-tag tech">大疆 M300 RTK</span>
+              <span class="skill-tag tech">Pix4Dmapper</span>
+              <span class="skill-tag tech">ContextCapture</span>
+              <span class="skill-tag tech">ArcGIS</span>
+              <span class="skill-tag tech">QGIS</span>
+              <span class="skill-tag tech">Global Mapper</span>
+              <span class="skill-tag tech">全站仪 / GPS</span>
+              <span class="skill-tag tech">CAD 测绘出图</span>
+              <span class="skill-tag tech">DOM / DSM 制作</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 新媒体运营 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="skill-category-card rounded-4 p-4 h-100">
+            <div class="skill-icon-wrapper mb-3">
+              <i class="bi bi-graph-up-arrow"></i>
+            </div>
+            <h3 class="skill-category-title mb-3">📱 新媒体运营</h3>
+            <div class="skill-tags">
+              <span class="skill-tag ops">抖音本地生活运营</span>
+              <span class="skill-tag ops">账号策划与定位</span>
+              <span class="skill-tag ops">流量投放与优化</span>
+              <span class="skill-tag ops">短视频脚本撰写</span>
+              <span class="skill-tag ops">数据分析与复盘</span>
+              <span class="skill-tag ops">客户服务管理</span>
+              <span class="skill-tag ops">线上线下活动统筹</span>
+              <span class="skill-tag ops">微信公众号运营</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 设计与工具 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="skill-category-card rounded-4 p-4 h-100">
+            <div class="skill-icon-wrapper mb-3">
+              <i class="bi bi-palette-fill"></i>
+            </div>
+            <h3 class="skill-category-title mb-3">🎨 设计与工具</h3>
+            <div class="skill-tags">
+              <span class="skill-tag design">Photoshop</span>
+              <span class="skill-tag design">Premiere Pro</span>
+              <span class="skill-tag design">After Effects</span>
+              <span class="skill-tag design">3DMAX 基础建模</span>
+              <span class="skill-tag design">无人机航拍</span>
+              <span class="skill-tag design">影像后期处理</span>
+              <span class="skill-tag design">Office 全系</span>
+              <span class="skill-tag design">数据分析报表</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 工作经历（时间线） ========== -->
+  <section id="experience" class="section-padding reveal">
+    <div class="container">
+      <div class="section-header text-center mb-4">
+        <span class="section-tag">EXPERIENCE</span>
+        <h2 class="section-title">工作经历</h2>
+        <p class="section-subtitle">从天空到屏幕，每一次转身都是积累</p>
+      </div>
+      <div class="section-divider"></div>
+
+      <div class="timeline">
+        <!-- 经历 1：咿呀英博 -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content rounded-4 p-4">
+            <div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
+              <h3 class="timeline-title mb-0">抖音本地推广组专员</h3>
+              <span class="timeline-date">2024.03 — 2026.05</span>
+            </div>
+            <p class="timeline-org mb-3">
+              <i class="bi bi-building me-1"></i>咿呀英博集团
+            </p>
+            <ul class="timeline-details mb-0">
+              <li>主导抖音本地推广项目组组织架构建设、运营及人员培养管理</li>
+              <li>日均响应平台咨询 <strong>50+</strong>，处理投诉纠纷 <strong>300+</strong> 起，客户满意度 <strong>96%+</strong></li>
+              <li>通过数据分析推动本地门店到店量 <strong>提升 32%</strong></li>
+              <li>统筹线上线下活动全流程——预热引流、现场执行、转化复盘</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 经历 2：融昶通信 -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content rounded-4 p-4">
+            <div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
+              <h3 class="timeline-title mb-0">客服专员</h3>
+              <span class="timeline-date">2023.07 — 2023.09</span>
+            </div>
+            <p class="timeline-org mb-3">
+              <i class="bi bi-building me-1"></i>湖北融昶通信服务有限公司
+            </p>
+            <ul class="timeline-details mb-0">
+              <li>日均处理进线电话 <strong>40+</strong>，一次性问题解决率达 <strong>92%</strong></li>
+              <li>收集有效反馈 200+ 条，形成服务流程优化建议并被采纳</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 经历 3：宏图勘测 -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content rounded-4 p-4">
+            <div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
+              <h3 class="timeline-title mb-0">测量员 / 航测实习生</h3>
+              <span class="timeline-date">2023.03 — 2023.07</span>
+            </div>
+            <p class="timeline-org mb-3">
+              <i class="bi bi-building me-1"></i>恩施州宏图勘测规划设计有限公司
+            </p>
+            <ul class="timeline-details mb-0">
+              <li>独立完成金龙大道 6 个地块实地测绘放样（全站仪、GPS），数据准确率 <strong>99.5%</strong></li>
+              <li>参与建始蛇皮洞水库、崔家坝农村土地确权项目（大疆精灵 4 RTK，<strong>36 架次</strong>）</li>
+              <li>协助影像拼接、像控点布设、DOM/DSM 制作及成果质检</li>
+              <li>建立完整飞行日志与设备档案管理体系</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 教育背景 ========== -->
+  <section id="education" class="section-padding reveal">
+    <div class="container">
+      <div class="section-header text-center mb-5">
+        <span class="section-tag">EDUCATION</span>
+        <h2 class="section-title">教育背景</h2>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="edu-card rounded-4 p-4 p-lg-5 text-center">
+            <div class="edu-icon mb-3">
+              <i class="bi bi-mortarboard-fill"></i>
+            </div>
+            <h3 class="fw-bold mb-2">长江大学工程技术学院</h3>
+            <p class="text-primary fw-semibold mb-2">无人机应用技术专业</p>
+            <p class="text-secondary mb-3">2020.10 — 2023.06</p>
+            <div class="edu-achievements d-flex justify-content-center gap-4 flex-wrap">
+              <span class="badge-achievement">
+                <i class="bi bi-trophy-fill text-warning me-1"></i>连续三年专业前 3%
+              </span>
+              <span class="badge-achievement">
+                <i class="bi bi-star-fill text-warning me-1"></i>校级二等奖学金
+              </span>
+              <span class="badge-achievement">
+                <i class="bi bi-people-fill me-1"></i>120 人中排名第 3
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 作品展示 ========== -->
+  <section id="portfolio" class="section-padding reveal">
+    <div class="container">
+      <div class="section-header text-center mb-5">
+        <span class="section-tag">PORTFOLIO</span>
+        <h2 class="section-title">视频作品</h2>
+        <p class="section-subtitle">抖音短视频创作与实践</p>
+      </div>
+
+      <div class="row g-4 justify-content-center">
+        <div class="col-md-6">
+          <div class="portfolio-card rounded-4 overflow-hidden">
+            <div class="video-wrapper">
+              <video controls preload="auto" class="w-100" playsinline>
+                <source src="assets/video/douyin-1.mp4" type="video/mp4">
+                您的浏览器不支持视频播放
+              </video>
+            </div>
+            <div class="p-3">
+              <h5 class="fw-bold mb-1">抖音作品 ①</h5>
+              <p class="text-secondary mb-0 small">短视频创作 · 2026</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="portfolio-card rounded-4 overflow-hidden">
+            <div class="video-wrapper">
+              <video controls preload="auto" class="w-100" playsinline>
+                <source src="assets/video/douyin-2.mp4" type="video/mp4">
+                您的浏览器不支持视频播放
+              </video>
+            </div>
+            <div class="p-3">
+              <h5 class="fw-bold mb-1">抖音作品 ②</h5>
+              <p class="text-secondary mb-0 small">短视频创作 · 2026</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 联系我 ========== -->
+  <section id="contact" class="section-padding reveal">
+    <div class="container">
+      <div class="section-header text-center mb-5">
+        <span class="section-tag">CONTACT</span>
+        <h2 class="section-title">联系我</h2>
+        <p class="section-subtitle">期待与您交流，探索合作可能</p>
+      </div>
+
+      <div class="row justify-content-center g-4">
+        <div class="col-md-4">
+          <a href="mailto:contact@fangsizhao.me" class="contact-card rounded-4 p-4 text-center text-decoration-none d-block">
+            <div class="contact-icon mb-3">
+              <i class="bi bi-envelope-fill"></i>
+            </div>
+            <h5 class="fw-bold mb-1">邮箱</h5>
+            <p class="text-secondary mb-0">邮件联系</p>
+          </a>
+        </div>
+
+        <div class="col-md-4">
+          <div class="contact-card rounded-4 p-4 text-center">
+            <div class="contact-icon mb-3">
+              <i class="bi bi-telephone-fill"></i>
+            </div>
+            <h5 class="fw-bold mb-1">电话</h5>
+            <p class="text-secondary mb-0">简历中查看</p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="contact-card rounded-4 p-4 text-center">
+            <div class="contact-icon mb-3">
+              <i class="bi bi-geo-alt-fill"></i>
+            </div>
+            <h5 class="fw-bold mb-1">所在地</h5>
+            <p class="text-secondary mb-0">湖北省恩施市</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 简历下载 -->
+      <div class="text-center mt-5">
+        <a href="方思照_个人简历.docx" class="btn btn-primary btn-lg px-5" download>
+          <i class="bi bi-download me-2"></i>下载简历
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 页脚 ========== -->
+  <footer class="site-footer py-4">
+    <div class="container text-center">
+      <p class="mb-1 text-secondary">© 2026 方思照 · 鄂ICP备XXXXXXXX号</p>
+      <p class="small text-secondary mb-0">
+        本站基于 <a href="https://getbootstrap.com" target="_blank" rel="noopener" class="text-decoration-none">Bootstrap 5</a> 构建 ·
+        开源协议 <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener" class="text-decoration-none">MIT</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- 自定义脚本 -->
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

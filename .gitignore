@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# IDE
+.vscode/
+.idea/
+
+# 大视频文件（本地保留，不上传 Git）
+assets/video/*.mp4
+
+# 原始素材（仅在 assets/video/ 中的副本是网站需要的）
+lv_*.mp4
+*.docx

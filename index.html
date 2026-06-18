@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="方思照 — 无人机技术 × 新媒体运营 双栖实践者。个人在线名片，展示专业背景、技能与作品。">
+  <meta name="description" content="方思照的个人空间 — 无人机技术 × 新媒体运营。这里记录了我在天空和屏幕之间的故事。">
   <meta name="keywords" content="方思照,无人机,航测,抖音运营,新媒体,个人网站,Bootstrap">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%233B82F6'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='18' font-family='sans-serif' font-weight='bold'>方</text></svg>">
   <title>方思照 | 无人机 × 新媒体 双栖实践者</title>
@@ -65,8 +65,8 @@
         <span class="typing-cursor">|</span>
       </div>
       <p class="lead text-secondary mb-5 mx-auto" style="max-width:600px;">
-        三年无人机测绘实操 + 两年抖音本地生活运营<br>
-        用技术驱动增长，以数据丈量世界
+        左手飞无人机丈量山川，右手跑数据运营流量<br>
+        这是我的个人空间，欢迎你来了解我
       </p>
       <div class="d-flex justify-content-center gap-3 flex-wrap">
         <a href="#portfolio" class="btn btn-primary btn-lg px-4">
@@ -99,17 +99,19 @@
           <div class="about-card p-4 p-lg-5 rounded-4">
             <p class="fs-5 lh-lg mb-4">
               我是<span class="text-highlight">方思照</span>，2002 年生于湖北恩施。
-              从长江大学工程技术学院无人机应用技术专业出发，
-              在航测外业的烈日下学会了精确，在抖音运营的流量里领悟了洞察。
+              一个左手能飞无人机做测绘、右手能跑抖音运营看数据的「两栖动物」。
             </p>
             <p class="lh-lg mb-4">
-              大学期间，我操控大疆精灵 4 RTK 完成了建始蛇皮洞水库、崔家坝农村土地确权等项目的航测任务，
-              累计飞行 36 架次，独立完成 6 个地块的实地测绘。这段经历塑造了我对<span class="text-highlight">数据精度</span>的苛刻追求。
+              航测教会我的一件事：<span class="text-highlight">精度决定一切</span>。一个像控点偏差几厘米，整张图就废了。
+              后来做抖音运营，我发现数据分析的底层逻辑是一样的——你对待数据的精确程度，
+              直接决定了投放策略能不能命中。别人看大盘，我看颗粒度。
+              这种「测绘式运营思维」让我在咿呀英博把门店到店量<span class="text-highlight">拉高了 32%</span>。
             </p>
             <p class="lh-lg mb-0">
-              2024 年加入咿呀英博集团后，我从天空转战屏幕——主导抖音本地推广项目组的架构建设，
-              日均响应 50+ 平台咨询，处理投诉纠纷 300+ 起，客户满意度稳定在 96% 以上。
-              通过数据分析驱动的策略优化，推动本地门店到店量<span class="text-highlight">提升 32%</span>。
+              反过来也成立。航拍练出的构图和镜头感，让我在做短视频时天然知道什么画面能留住人。
+              三年飞了<span class="text-highlight">36 架次</span>、处理了不计其数的影像，
+              那些关于光线、角度、节奏的直觉，后来全用在了内容创作上。
+              左右手不是分工——是互相喂招。
             </p>
           </div>
         </div>
@@ -341,30 +343,42 @@
       <div class="row g-4 justify-content-center">
         <div class="col-md-6">
           <div class="portfolio-card rounded-4 overflow-hidden">
-            <div class="video-wrapper">
-              <video controls preload="auto" class="w-100" playsinline>
+            <div class="video-cover-wrapper" onclick="var v=this.querySelector('video');v.play();this.classList.add('playing')">
+              <img src="assets/video/cover-1.jpg" alt="抖音作品 ①" class="video-cover-img" loading="lazy">
+              <div class="play-overlay">
+                <div class="play-btn">
+                  <i class="bi bi-play-fill"></i>
+                </div>
+                <span class="play-hint">点击播放</span>
+              </div>
+              <video controls preload="none" class="video-hidden" playsinline>
                 <source src="assets/video/douyin-1.mp4" type="video/mp4">
-                您的浏览器不支持视频播放
               </video>
             </div>
             <div class="p-3">
               <h5 class="fw-bold mb-1">抖音作品 ①</h5>
-              <p class="text-secondary mb-0 small">短视频创作 · 2026</p>
+              <p class="text-secondary mb-0 small">点击封面播放视频</p>
             </div>
           </div>
         </div>
 
         <div class="col-md-6">
           <div class="portfolio-card rounded-4 overflow-hidden">
-            <div class="video-wrapper">
-              <video controls preload="auto" class="w-100" playsinline>
+            <div class="video-cover-wrapper" onclick="var v=this.querySelector('video');v.play();this.classList.add('playing')">
+              <img src="assets/video/cover-2.jpg" alt="抖音作品 ②" class="video-cover-img" loading="lazy">
+              <div class="play-overlay">
+                <div class="play-btn">
+                  <i class="bi bi-play-fill"></i>
+                </div>
+                <span class="play-hint">点击播放</span>
+              </div>
+              <video controls preload="none" class="video-hidden" playsinline>
                 <source src="assets/video/douyin-2.mp4" type="video/mp4">
-                您的浏览器不支持视频播放
               </video>
             </div>
             <div class="p-3">
               <h5 class="fw-bold mb-1">抖音作品 ②</h5>
-              <p class="text-secondary mb-0 small">短视频创作 · 2026</p>
+              <p class="text-secondary mb-0 small">点击封面播放视频</p>
             </div>
           </div>
         </div>
@@ -383,12 +397,12 @@
 
       <div class="row justify-content-center g-4">
         <div class="col-md-4">
-          <a href="mailto:contact@fangsizhao.me" class="contact-card rounded-4 p-4 text-center text-decoration-none d-block">
+          <a href="mailto:744959529@qq.com" class="contact-card rounded-4 p-4 text-center text-decoration-none d-block">
             <div class="contact-icon mb-3">
               <i class="bi bi-envelope-fill"></i>
             </div>
             <h5 class="fw-bold mb-1">邮箱</h5>
-            <p class="text-secondary mb-0">邮件联系</p>
+            <p class="text-secondary mb-0">744959529@qq.com</p>
           </a>
         </div>
 

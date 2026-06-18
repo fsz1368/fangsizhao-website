@@ -728,6 +728,89 @@ a:hover {
   object-fit: contain;
 }
 
+/* 视频封面 + 播放按钮 */
+.video-cover-wrapper {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  cursor: pointer;
+  background: #000;
+}
+
+.video-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease, opacity 0.4s ease;
+}
+
+.video-cover-wrapper:hover .video-cover-img {
+  transform: scale(1.05);
+}
+
+.video-cover-wrapper.playing .video-cover-img,
+.video-cover-wrapper.playing .play-overlay {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.video-cover-wrapper.playing video {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  transition: opacity 0.4s ease, background 0.3s ease;
+}
+
+.video-cover-wrapper:hover .play-overlay {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.play-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: var(--accent-blue);
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1.2), background 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.video-cover-wrapper:hover .play-btn {
+  transform: scale(1.1);
+  background: #fff;
+}
+
+.play-hint {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.video-hidden {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
 /* ---------- 联系卡片 ---------- */
 .contact-card {
   background: rgba(var(--accent-blue-rgb), 0.03);

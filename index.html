@@ -50,6 +50,8 @@
   <section id="hero" class="hero-section d-flex align-items-center min-vh-100">
     <!-- 粒子画布 -->
     <canvas id="particleCanvas" aria-hidden="true"></canvas>
+    <!-- 低多边形无人机 -->
+    <canvas id="droneCanvas" aria-hidden="true"></canvas>
     <!-- 动态光晕 -->
     <div class="hero-glow-1" aria-hidden="true"></div>
     <div class="hero-glow-2" aria-hidden="true"></div>
@@ -158,6 +160,18 @@
         <p class="section-subtitle">横跨无人机测绘、新媒体运营与视觉设计三大领域</p>
       </div>
       <div class="section-divider"></div>
+
+      <!-- 技能雷达图 -->
+      <div class="radar-container mb-5">
+        <div class="row align-items-center">
+          <div class="col-lg-5 text-center mb-4 mb-lg-0">
+            <canvas id="skillRadar" width="400" height="400"></canvas>
+          </div>
+          <div class="col-lg-7">
+            <div class="radar-legend" id="radarLegend"></div>
+          </div>
+        </div>
+      </div>
 
       <div class="row g-4">
         <!-- 无人机测绘 -->
@@ -334,54 +348,43 @@
   <!-- ========== 作品展示 ========== -->
   <section id="portfolio" class="section-padding reveal">
     <div class="container">
-      <div class="section-header text-center mb-5">
+      <div class="section-header text-center mb-4">
         <span class="section-tag">PORTFOLIO</span>
-        <h2 class="section-title">视频作品</h2>
-        <p class="section-subtitle">抖音短视频创作与实践</p>
+        <h2 class="section-title">作品展示</h2>
+        <p class="section-subtitle">拖拽文件进来 · 点击播放 · 拖动排序</p>
+      </div>
+      <div class="section-divider"></div>
+
+      <!-- 拖拽提示 -->
+      <div class="drop-hint text-center mb-4" id="dropHint">
+        <div class="drop-hint-icon"><i class="bi bi-cloud-upload"></i></div>
+        <p class="text-secondary mb-0">拖拽视频或图片到这里添加</p>
       </div>
 
-      <div class="row g-4 justify-content-center">
-        <div class="col-md-6">
-          <div class="portfolio-card rounded-4 overflow-hidden">
-            <div class="video-cover-wrapper" onclick="var v=this.querySelector('video');v.play();this.classList.add('playing')">
-              <img src="assets/video/cover-1.jpg" alt="抖音作品 ①" class="video-cover-img" loading="lazy">
-              <div class="play-overlay">
-                <div class="play-btn">
-                  <i class="bi bi-play-fill"></i>
-                </div>
-                <span class="play-hint">点击播放</span>
-              </div>
-              <video controls preload="none" class="video-hidden" playsinline>
-                <source src="assets/video/douyin-1.mp4" type="video/mp4">
-              </video>
-            </div>
-            <div class="p-3">
-              <h5 class="fw-bold mb-1">抖音作品 ①</h5>
-              <p class="text-secondary mb-0 small">点击封面播放视频</p>
-            </div>
-          </div>
-        </div>
+      <!-- 分类筛选 -->
+      <div class="portfolio-filters" id="portfolioFilters">
+        <button class="filter-btn active" data-filter="all">全部</button>
+        <button class="filter-btn" data-filter="survey">🛸 航测项目</button>
+        <button class="filter-btn" data-filter="video">📱 短视频</button>
+        <button class="filter-btn" data-filter="image">🖼️ 图片作品</button>
+      </div>
 
-        <div class="col-md-6">
-          <div class="portfolio-card rounded-4 overflow-hidden">
-            <div class="video-cover-wrapper" onclick="var v=this.querySelector('video');v.play();this.classList.add('playing')">
-              <img src="assets/video/cover-2.jpg" alt="抖音作品 ②" class="video-cover-img" loading="lazy">
-              <div class="play-overlay">
-                <div class="play-btn">
-                  <i class="bi bi-play-fill"></i>
-                </div>
-                <span class="play-hint">点击播放</span>
-              </div>
-              <video controls preload="none" class="video-hidden" playsinline>
-                <source src="assets/video/douyin-2.mp4" type="video/mp4">
-              </video>
-            </div>
-            <div class="p-3">
-              <h5 class="fw-bold mb-1">抖音作品 ②</h5>
-              <p class="text-secondary mb-0 small">点击封面播放视频</p>
-            </div>
-          </div>
+      <!-- 拖拽覆盖层 -->
+      <div class="drop-overlay" id="dropOverlay">
+        <div class="drop-overlay-content">
+          <div class="drop-overlay-icon"><i class="bi bi-plus-circle"></i></div>
+          <p class="fs-5 fw-bold">释放以添加</p>
         </div>
+      </div>
+
+      <!-- 瀑布流网格 -->
+      <div class="masonry-grid" id="masonryGrid"></div>
+
+      <!-- 全屏播放器 -->
+      <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" id="lightboxClose"><i class="bi bi-x-lg"></i></button>
+        <button class="lightbox-delete" id="lightboxDelete"><i class="bi bi-trash"></i></button>
+        <div class="lightbox-content" id="lightboxContent"></div>
       </div>
     </div>
   </section>
@@ -429,9 +432,14 @@
 
       <!-- 简历下载 -->
       <div class="text-center mt-5">
-        <a href="方思照_个人简历.docx" class="btn btn-primary btn-lg px-5" download>
-          <i class="bi bi-download me-2"></i>下载简历
-        </a>
+        <button class="btn btn-primary btn-lg px-5 download-btn" id="downloadResume" data-file="方思照_个人简历.docx">
+          <span class="download-ready">
+            <i class="bi bi-download me-2"></i>下载简历 <small class="ms-1 opacity-75">.docx</small>
+          </span>
+          <span class="download-loading d-none">
+            <span class="spinner-border spinner-border-sm me-2"></span>准备中…
+          </span>
+        </button>
       </div>
     </div>
   </section>
@@ -451,5 +459,6 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
   <!-- 自定义脚本 -->
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/portfolio.js"></script>
 </body>
 </html>

@@ -1092,4 +1092,10 @@ a.contact-card:hover .contact-icon {
   .video-wrapper {
     aspect-ratio: 9 / 16;
   }
+
+  /* 移动端联系人纵向排列 */
+  .contact-card {
+    max-width: 320px;
+    margin: 0 auto;
+  }
 }

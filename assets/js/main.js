@@ -155,7 +155,7 @@
   if (nc) nc.addEventListener('click', function (e) { if (e.target.tagName === 'A' && nc.classList.contains('show')) { var bs = bootstrap.Collapse.getInstance(nc); if (bs) bs.hide(); } });
 
   /* ========== 按钮点击反馈 ========== */
-  document.addEventListener('click', function (e) { var btn = e.target.closest('.btn'); if (!btn || btn.closest('#downloadResume')) return; btn.style.transition = 'transform 0.12s ease'; btn.style.transform = 'scale(0.94)'; setTimeout(function () { btn.style.transform = ''; }, 150); });
+  document.addEventListener('click', function (e) { var btn = e.target.closest('.btn'); if (!btn || btn.closest('#downloadResume')) return; btn.style.transition = 'transform 0.15s ease-out'; btn.style.transform = 'scale(0.96)'; setTimeout(function () { btn.style.transform = ''; }, 180); });
 
   /* ========== 回到顶部按钮 ========== */
   var backBtn = document.createElement('button');

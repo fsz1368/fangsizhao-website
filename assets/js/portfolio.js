@@ -126,10 +126,28 @@
   }
 
   /* ========== 分类推断 ========== */
+  var pendingFiles = [];
   function inferCategory(file) {
     if (file.type.startsWith('video/')) return 'video';
     if (file.type.startsWith('image/')) return 'image';
-    return 'all';
+    return 'image'; // 默认图片
+  }
+
+  // 拖拽后弹出分类选择
+  function showCategoryPicker(files, callback) {
+    var overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:10001;background:rgba(10,14,23,0.92);display:flex;align-items:center;justify-content:center;';
+    overlay.innerHTML = '<div style="background:#111620;border:1px solid rgba(124,135,152,0.2);border-radius:16px;padding:32px;text-align:center;max-width:360px;width:90%;"><p style="color:#ECEFF4;font-size:1.1rem;margin-bottom:4px;">' + files.length + ' 个文件</p><p style="color:#7C8798;margin-bottom:20px;">请选择分类：</p><div style="display:flex;flex-direction:column;gap:10px;"><button class="cat-pick-btn" data-cat="video" style="padding:12px 20px;border-radius:12px;border:1px solid rgba(124,135,152,0.2);background:#171D2A;color:#ECEFF4;font-size:1rem;cursor:pointer;">📱 短视频</button><button class="cat-pick-btn" data-cat="survey" style="padding:12px 20px;border-radius:12px;border:1px solid rgba(124,135,152,0.2);background:#171D2A;color:#ECEFF4;font-size:1rem;cursor:pointer;">🛸 航测项目</button><button class="cat-pick-btn" data-cat="image" style="padding:12px 20px;border-radius:12px;border:1px solid rgba(124,135,152,0.2);background:#171D2A;color:#ECEFF4;font-size:1rem;cursor:pointer;">🖼️ 图片作品</button></div></div>';
+    document.body.appendChild(overlay);
+    overlay.querySelectorAll('.cat-pick-btn').forEach(function (btn) {
+      btn.addEventListener('mouseenter', function () { this.style.borderColor = '#E8990C'; this.style.background = '#1A2235'; });
+      btn.addEventListener('mouseleave', function () { this.style.borderColor = 'rgba(124,135,152,0.2)'; this.style.background = '#171D2A'; });
+      btn.addEventListener('click', function () {
+        var cat = this.dataset.cat;
+        document.body.removeChild(overlay);
+        callback(cat);
+      });
+    });
   }
 
   /* ========== 排序 ========== */

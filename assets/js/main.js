@@ -77,7 +77,18 @@
       animId = requestAnimationFrame(draw);
     }
     var heroEl = document.getElementById('hero');
-    if (heroEl) { heroEl.addEventListener('mousemove', function (e) { var rect = heroEl.getBoundingClientRect(); mouseX = e.clientX - rect.left; mouseY = e.clientY - rect.top; }); heroEl.addEventListener('mouseleave', function () { mouseX = -100; mouseY = -100; }); }
+    if (heroEl) {
+      heroEl.addEventListener('mousemove', function (e) { var rect = heroEl.getBoundingClientRect(); mouseX = e.clientX - rect.left; mouseY = e.clientY - rect.top; });
+      heroEl.addEventListener('mouseleave', function () { mouseX = -100; mouseY = -100; });
+      // Hero 不可见时暂停粒子动画
+      var paused = false;
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries) {
+          if (entries[0].isIntersecting && paused) { draw(); paused = false; }
+          else if (!entries[0].isIntersecting && !paused) { cancelAnimationFrame(animId); paused = true; }
+        }, { threshold: 0 }).observe(heroEl);
+      }
+    }
     resizeCanvas(); createParticles(); draw();
     window.addEventListener('resize', function () { resizeCanvas(); createParticles(); });
   }

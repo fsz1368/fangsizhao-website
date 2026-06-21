@@ -311,7 +311,18 @@
     });
   }
 
-  function saveOrder() { var now = Date.now(); for (var i = currentItems.length - 1; i >= 0; i--) { currentItems[i].sortOrder = i; currentItems[i].updatedAt = now - i; saveItem(currentItems[i]); } }
+  function saveOrder() {
+    if (!db) return;
+    var now = Date.now();
+    var tx = db.transaction(STORE_NAME, 'readwrite');
+    var store = tx.objectStore(STORE_NAME);
+    for (var i = 0; i < currentItems.length; i++) {
+      currentItems[i].sortOrder = i;
+      currentItems[i].updatedAt = now - i;
+      store.put(currentItems[i]);
+    }
+    return new Promise(function (resolve, reject) { tx.oncomplete = resolve; tx.onerror = function (e) { reject(e.target.error); }; });
+  }
 
   /* ========== 分类筛选 ========== */
   if (filterContainer) {

@@ -139,6 +139,18 @@
   /* ========== 按钮点击反馈 ========== */
   document.addEventListener('click', function (e) { var btn = e.target.closest('.btn'); if (!btn || btn.closest('#downloadResume')) return; btn.style.transition = 'transform 0.12s ease'; btn.style.transform = 'scale(0.94)'; setTimeout(function () { btn.style.transform = ''; }, 150); });
 
+  /* ========== 回到顶部按钮 ========== */
+  var backBtn = document.createElement('button');
+  backBtn.id = 'backToTop'; backBtn.className = 'back-to-top'; backBtn.title = '回到顶部';
+  backBtn.innerHTML = '<i class="bi bi-arrow-up"></i>';
+  document.body.appendChild(backBtn);
+
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > 600) backBtn.classList.add('visible');
+    else backBtn.classList.remove('visible');
+  });
+  backBtn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
   /* ========== 下载按钮 ========== */
   var dlBtn = document.getElementById('downloadResume');
   if (dlBtn) {

@@ -9,9 +9,9 @@
   <title>方思照 | 无人机 × 新媒体 双栖实践者</title>
 
   <!-- Bootstrap 5.3 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/lib/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Icons -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/lib/bootstrap-icons.css" rel="stylesheet">
   <!-- 自定义样式 -->
   <link href="assets/css/style.css" rel="stylesheet">
 </head>
@@ -96,9 +96,24 @@
       </div>
 
       <div class="row g-5 align-items-center">
-        <!-- 左侧：个人简介 -->
-        <div class="col-lg-7">
-          <div class="about-card p-4 p-lg-5 rounded-4">
+        <!-- 左侧：个人演示视频 -->
+        <div class="col-lg-6">
+          <div class="about-video-wrapper rounded-4 overflow-hidden">
+            <video
+              src="assets/video/about-demo.mp4"
+              autoplay muted loop playsinline
+              class="about-video"
+              aria-label="个人介绍演示视频"
+            ></video>
+            <div class="about-video-label">
+              <i class="bi bi-play-circle me-1"></i>个人演示
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧：个人简介 + 数据 -->
+        <div class="col-lg-6">
+          <div class="about-card p-4 p-lg-5 rounded-4 mb-4">
             <p class="fs-5 lh-lg mb-4">
               我是<span class="text-highlight">方思照</span>，2002 年生于湖北恩施。
               一个左手能飞无人机做测绘、右手能跑抖音运营看数据的「两栖动物」。
@@ -111,15 +126,13 @@
             </p>
             <p class="lh-lg mb-0">
               反过来也成立。航拍练出的构图和镜头感，让我在做短视频时天然知道什么画面能留住人。
-              三年飞了<span class="text-highlight">36 架次</span>、处理了不计其数的影像，
+              三年飞了<span class="text-highlight">36 架次</span>、处理了不计其数的影像——
               那些关于光线、角度、节奏的直觉，后来全用在了内容创作上。
-              左右手不是分工——是互相喂招。
+              左右手不是分工，是互相喂招。
             </p>
           </div>
-        </div>
 
-        <!-- 右侧：核心数据 -->
-        <div class="col-lg-5">
+          <!-- 核心数据 -->
           <div class="row g-3">
             <div class="col-6">
               <div class="stat-card rounded-4 p-4 text-center">
@@ -361,12 +374,28 @@
         <p class="text-secondary mb-0">拖拽视频或图片到这里添加</p>
       </div>
 
-      <!-- 分类筛选 -->
-      <div class="portfolio-filters" id="portfolioFilters">
-        <button class="filter-btn active" data-filter="all">全部</button>
-        <button class="filter-btn" data-filter="survey">🛸 航测项目</button>
-        <button class="filter-btn" data-filter="video">📱 短视频</button>
-        <button class="filter-btn" data-filter="image">🖼️ 图片作品</button>
+      <!-- 分类筛选 + 排序 -->
+      <div class="portfolio-toolbar">
+        <div class="portfolio-filters" id="portfolioFilters">
+          <button class="filter-btn active" data-filter="all">全部</button>
+          <button class="filter-btn" data-filter="survey">🛸 航测</button>
+          <button class="filter-btn" data-filter="video">📱 短视频</button>
+          <button class="filter-btn" data-filter="image">🖼️ 图片</button>
+        </div>
+        <div class="portfolio-sort">
+          <select class="sort-select" id="sortSelect">
+            <option value="newest">最新上传</option>
+            <option value="oldest">最早上传</option>
+            <option value="name">名称排序</option>
+            <option value="size">文件大小</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 上传进度条 -->
+      <div class="upload-progress" id="uploadProgress" style="display:none">
+        <div class="upload-progress-bar" id="uploadProgressBar"></div>
+        <span class="upload-progress-text" id="uploadProgressText">上传中...</span>
       </div>
 
       <!-- 拖拽覆盖层 -->
@@ -456,7 +485,7 @@
   </footer>
 
   <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/lib/bootstrap.bundle.min.js"></script>
   <!-- 自定义脚本 -->
   <script src="assets/js/main.js"></script>
   <script src="assets/js/portfolio.js"></script>

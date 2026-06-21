@@ -394,6 +394,41 @@ a:hover {
   font-weight: 600;
 }
 
+/* ---------- 关于视频 ---------- */
+.about-video-wrapper {
+  position: relative;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-video-wrapper:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px rgba(var(--accent-blue-rgb), 0.2);
+}
+
+.about-video {
+  width: 100%;
+  display: block;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: #000;
+}
+
+.about-video-label {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 500;
+  pointer-events: none;
+}
+
 /* ---------- 关于卡片 ---------- */
 .about-card {
   background: rgba(var(--accent-blue-rgb), 0.03);
@@ -749,14 +784,46 @@ a:hover {
 
 /* ---------- 作品展示 —— 瀑布流 ---------- */
 
+/* 作品工具栏 */
+.portfolio-toolbar {
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 12px; margin-bottom: 20px;
+}
+
 /* 分类筛选 */
 .portfolio-filters {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 24px;
+  display: flex; gap: 8px; flex-wrap: wrap;
 }
+
+/* 排序下拉 */
+.sort-select {
+  padding: 8px 14px; border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: rgba(var(--accent-blue-rgb), 0.04);
+  color: var(--text-primary); font-size: 0.85rem;
+  cursor: pointer; outline: none;
+}
+.sort-select:focus { border-color: var(--accent-blue); }
+
+/* 上传进度条 */
+.upload-progress {
+  margin-bottom: 16px; padding: 10px 16px;
+  background: rgba(var(--accent-blue-rgb), 0.06);
+  border-radius: 12px; display: flex; align-items: center; gap: 12px;
+}
+.upload-progress-bar {
+  flex: 1; height: 6px; border-radius: 3px;
+  background: rgba(var(--accent-blue-rgb), 0.15); overflow: hidden;
+}
+.upload-progress-bar::after {
+  content: ''; display: block; height: 100%; width: 0;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-gold));
+  border-radius: 3px; animation: uploadPulse 1.5s ease-in-out infinite;
+}
+@keyframes uploadPulse {
+  0% { width: 10%; } 50% { width: 70%; } 100% { width: 95%; }
+}
+.upload-progress-text { font-size: 0.8rem; color: var(--text-secondary); white-space: nowrap; }
 
 .filter-btn {
   padding: 8px 20px;
@@ -864,6 +931,20 @@ a:hover {
 /* 响应式 */
 @media (max-width: 991.98px) { .masonry-grid { column-count: 2; } }
 @media (max-width: 575.98px) { .masonry-grid { column-count: 1; } }
+
+/* 回到顶部 */
+.back-to-top {
+  position: fixed; bottom: 28px; right: 28px; z-index: 9997;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--accent-blue); color: #fff; border: none;
+  font-size: 1.1rem; cursor: pointer;
+  opacity: 0; transform: translateY(16px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s ease;
+  box-shadow: 0 4px 16px rgba(var(--accent-blue-rgb), 0.35);
+}
+.back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.back-to-top:hover { background: var(--accent-gold); box-shadow: 0 6px 24px rgba(var(--accent-gold-rgb), 0.4); transform: translateY(-2px); }
 
 /* 下载按钮 */
 .download-btn { transition: all 0.3s ease !important; }

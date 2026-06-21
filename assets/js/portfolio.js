@@ -12,6 +12,10 @@
   var currentItems = [];
   var currentLightboxId = null;
   var currentFilter = 'all';
+  var currentSort = 'newest';
+  var uploadProgress = document.getElementById('uploadProgress');
+  var uploadProgressText = document.getElementById('uploadProgressText');
+  var sortSelect = document.getElementById('sortSelect');
 
   var masonryGrid = document.getElementById('masonryGrid');
   var dropOverlay = document.getElementById('dropOverlay');
@@ -120,14 +124,6 @@
     });
   }
 
-  function readFileAsDataURL(file) {
-    return new Promise(function (resolve) {
-      var reader = new FileReader();
-      reader.onload = function (e) { resolve(e.target.result); };
-      reader.readAsDataURL(file);
-    });
-  }
-
   /* ========== 分类推断 ========== */
   function inferCategory(file) {
     if (file.type.startsWith('video/')) return 'video';
@@ -135,51 +131,88 @@
     return 'all';
   }
 
+  /* ========== 排序 ========== */
+  function getSortedItems() {
+    var all = currentFilter === 'all' ? currentItems.slice() : currentItems.filter(function (it) { return it.category === currentFilter; });
+    switch (currentSort) {
+      case 'oldest': all.sort(function (a, b) { return (a.createdAt || 0) - (b.createdAt || 0); }); break;
+      case 'name': all.sort(function (a, b) { return (a.name || '').localeCompare(b.name || ''); }); break;
+      case 'size': all.sort(function (a, b) { return (b.size || 0) - (a.size || 0); }); break;
+      default: /* newest */ all.sort(function (a, b) { return (b.createdAt || 0) - (a.createdAt || 0); });
+    }
+    return all;
+  }
+
+  if (sortSelect) {
+    sortSelect.addEventListener('change', function () { currentSort = this.value; renderGrid(); });
+  }
+
   /* ========== 文件处理 ========== */
   function processFiles(files) {
+    if (!files.length) return;
+    if (uploadProgress) { uploadProgress.style.display = ''; if (uploadProgressText) uploadProgressText.textContent = '处理 0/' + files.length; }
+
+    var total = files.length, done = 0;
+    var MAX_SIZE = 200 * 1024 * 1024; // 200MB 上限
     var promises = files.map(function (file) {
       var isVideo = file.type.startsWith('video/');
       var cat = inferCategory(file);
 
+      if (file.size > MAX_SIZE) {
+        alert('文件 "' + file.name + '" 超过 200MB 上限，已跳过');
+        return null;
+      }
+
       if (isVideo) {
         return generateVideoThumb(file).then(function (result) {
-          return readFileAsDataURL(file).then(function (dataUrl) {
-            return {
-              id: 'media_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
-              type: 'video', category: cat,
-              name: file.name.replace(/\.[^.]+$/, ''),
-              desc: '',
-              mime: file.type, dataUrl: dataUrl,
-              thumb: result.thumb, thumbW: result.width, thumbH: result.height,
-              size: file.size, createdAt: Date.now()
-            };
-          });
+          // 视频：存储 Blob（非 Base64）+ 缩略图 JPEG
+          var id = 'media_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+          return {
+            id: id, type: 'video', category: cat,
+            name: file.name.replace(/\.[^.]+$/, ''),
+            desc: '',
+            mime: file.type, blob: file,
+            thumb: result.thumb, thumbW: result.width, thumbH: result.height,
+            size: file.size, createdAt: Date.now()
+          };
         });
       } else {
         return readImageFile(file).then(function (result) {
-          return readFileAsDataURL(file).then(function (dataUrl) {
-            return {
-              id: 'media_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
-              type: 'image', category: cat,
-              name: file.name.replace(/\.[^.]+$/, ''),
-              desc: '',
-              mime: file.type, dataUrl: dataUrl,
-              thumb: result.thumb, thumbW: result.width, thumbH: result.height,
-              size: file.size, createdAt: Date.now()
-            };
-          });
+          var id = 'media_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+          return {
+            id: id, type: 'image', category: cat,
+            name: file.name.replace(/\.[^.]+$/, ''),
+            desc: '',
+            mime: file.type, blob: file,
+            thumb: result.thumb, thumbW: result.width, thumbH: result.height,
+            size: file.size, createdAt: Date.now()
+          };
         });
       }
-    });
+    }).filter(function (p) { return p !== null; });
 
     Promise.all(promises).then(function (items) {
-      var savePromises = items.map(function (item) { return saveItem(item); });
-      Promise.all(savePromises).then(function () {
+      if (uploadProgressText) uploadProgressText.textContent = '保存...';
+      var chain = Promise.resolve();
+      var saved = 0;
+      items.forEach(function (item) {
+        chain = chain.then(function () {
+          return saveItem(item).then(function () {
+            saved++;
+            if (uploadProgressText) uploadProgressText.textContent = '已保存 ' + saved + '/' + total;
+          });
+        });
+      });
+      return chain.then(function () {
         currentItems = items.concat(currentItems);
         renderGrid();
         if (dropHint) dropHint.style.display = 'none';
+        if (uploadProgress) uploadProgress.style.display = 'none';
       });
-    }).catch(function (err) { console.error('文件处理失败:', err); });
+    }).catch(function (err) {
+      console.error('文件处理失败:', err);
+      if (uploadProgress) uploadProgress.style.display = 'none';
+    });
   }
 
   /* ========== 拖拽（文件上传） ========== */
@@ -209,47 +242,52 @@
   /* ========== 渲染瀑布流 ========== */
   function renderGrid() {
     if (!masonryGrid) return;
-
-    var filtered = currentFilter === 'all' ? currentItems : currentItems.filter(function (it) { return it.category === currentFilter; });
+    var filtered = getSortedItems();
+    masonryGrid.innerHTML = '';
 
     if (filtered.length === 0) {
-      masonryGrid.innerHTML = '<div class="masonry-empty"><i class="bi bi-images"></i><p>还没有作品，拖拽视频或图片进来吧</p></div>';
-      return;
+      var empty = document.createElement('div'); empty.className = 'masonry-empty';
+      empty.innerHTML = '<i class="bi bi-images"></i><p>还没有作品，拖拽视频或图片进来吧</p>';
+      masonryGrid.appendChild(empty); return;
     }
 
-    var html = '';
     filtered.forEach(function (item, index) {
-      var thumbSrc = item.thumb || item.dataUrl;
-      var aspectHint = item.thumbW && item.thumbH ? ' style="aspect-ratio:' + item.thumbW + '/' + item.thumbH + '"' : '';
+      var el = document.createElement('div'); el.className = 'masonry-item';
+      el.setAttribute('draggable', 'true'); el.dataset.id = item.id; el.dataset.index = index;
+
+      // 缩略图：优先用预生成的 JPEG，无则用 Blob URL
+      var thumbSrc = item.thumb || (item.blob ? URL.createObjectURL(item.blob) : '');
+      // 缓存已创建的 blob URL 避免重复创建
+      if (!item.thumb && item.blob) item._blobUrl = thumbSrc;
+
+      var img = document.createElement('img'); img.src = thumbSrc;
+      img.alt = item.name; img.setAttribute('loading', 'lazy');
+      if (item.thumbW && item.thumbH) img.style.aspectRatio = item.thumbW + '/' + item.thumbH;
+      el.appendChild(img);
+
+      if (item.type === 'video') { var ply = document.createElement('div'); ply.className = 'play-overlay-mini'; ply.innerHTML = '<div class="play-btn-mini"><i class="bi bi-play-fill"></i></div>'; el.appendChild(ply); }
+
+      var del = document.createElement('button'); del.className = 'delete-btn'; del.title = '删除';
+      del.dataset.delete = item.id; del.innerHTML = '<i class="bi bi-x-lg"></i>';
+      del.addEventListener('click', function (e) { e.stopPropagation(); removeItem(this.dataset.delete); });
+      el.appendChild(del);
+
+      var badge = document.createElement('span'); badge.className = 'type-badge';
+      badge.textContent = item.type === 'video' ? '视频' : '图片'; el.appendChild(badge);
+
+      var info = document.createElement('div'); info.className = 'item-info';
       var catLabel = item.category === 'video' ? '短视频' : item.category === 'image' ? '图片' : '航测';
+      var cat = document.createElement('span'); cat.className = 'item-cat ' + item.category; cat.textContent = catLabel; info.appendChild(cat);
+      var title = document.createElement('div'); title.className = 'item-title'; title.textContent = item.name; info.appendChild(title);
+      if (item.desc) { var desc = document.createElement('div'); desc.className = 'item-desc'; desc.textContent = item.desc; info.appendChild(desc); }
+      el.appendChild(info);
 
-      html += '<div class="masonry-item" draggable="true" data-id="' + item.id + '" data-index="' + index + '">';
-      html += '<img src="' + thumbSrc + '" alt="' + esc(item.name) + '"' + aspectHint + ' loading="lazy">';
-      if (item.type === 'video') html += '<div class="play-overlay-mini"><div class="play-btn-mini"><i class="bi bi-play-fill"></i></div></div>';
-      html += '<button class="delete-btn" title="删除" data-delete="' + item.id + '"><i class="bi bi-x-lg"></i></button>';
-      html += '<span class="type-badge">' + (item.type === 'video' ? '视频' : '图片') + '</span>';
-      html += '<div class="item-info">';
-      html += '<span class="item-cat ' + item.category + '">' + catLabel + '</span>';
-      html += '<div class="item-title">' + esc(item.name) + '</div>';
-      if (item.desc) html += '<div class="item-desc">' + esc(item.desc) + '</div>';
-      html += '</div></div>';
+      el.addEventListener('click', function () { if (!el.classList.contains('dragging')) openLightbox(item.id); });
+      masonryGrid.appendChild(el);
     });
 
-    masonryGrid.innerHTML = html;
-
-    // 删除按钮
-    masonryGrid.querySelectorAll('[data-delete]').forEach(function (btn) {
-      btn.addEventListener('click', function (e) { e.stopPropagation(); removeItem(this.getAttribute('data-delete')); });
-    });
-    // 点击播放
-    masonryGrid.querySelectorAll('.masonry-item').forEach(function (el) {
-      el.addEventListener('click', function (e) { if (!el.classList.contains('dragging')) openLightbox(this.getAttribute('data-id')); });
-    });
-    // 拖动排序
     bindDragSort(masonryGrid.querySelectorAll('.masonry-item'));
   }
-
-  function esc(str) { var d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
 
   /* ========== 拖动排序 ========== */
   var dragSrcId = null;
@@ -291,12 +329,15 @@
   function openLightbox(id) {
     var item = currentItems.find(function (it) { return it.id === id; }); if (!item) return;
     currentLightboxId = id; lightboxContent.innerHTML = '';
+    var src = item._blobUrl || (item.blob ? URL.createObjectURL(item.blob) : '');
+    if (!item._blobUrl && item.blob) item._blobUrl = src;
+
     if (item.type === 'video') {
-      var v = document.createElement('video'); v.src = item.dataUrl; v.controls = true; v.autoplay = true; v.playsInline = true;
+      var v = document.createElement('video'); v.src = src; v.controls = true; v.autoplay = true; v.playsInline = true;
       v.setAttribute('controlsList', 'nodownload'); v.style.maxWidth = '90vw'; v.style.maxHeight = '90vh'; v.style.borderRadius = '8px';
       lightboxContent.appendChild(v);
     } else {
-      var img = document.createElement('img'); img.src = item.dataUrl; img.alt = item.name; img.setAttribute('draggable', 'false');
+      var img = document.createElement('img'); img.src = src; img.alt = item.name; img.setAttribute('draggable', 'false');
       lightboxContent.appendChild(img);
     }
     lightbox.classList.add('active'); document.body.style.overflow = 'hidden';
@@ -308,8 +349,16 @@
   if (lightboxDelete) lightboxDelete.addEventListener('click', function () { if (currentLightboxId) removeItem(currentLightboxId); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox(); });
   if (lightbox) lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLightbox(); });
-  document.addEventListener('contextmenu', function (e) { if (e.target.closest('.masonry-item') || e.target.closest('.lightbox-content')) e.preventDefault(); });
+  // 仅阻止作品媒体元素的右键菜单，不影响页面其他区域
+  document.addEventListener('contextmenu', function (e) { var el = e.target.closest('.masonry-item img, .masonry-item video, .lightbox-content img, .lightbox-content video'); if (el) e.preventDefault(); });
 
   /* ========== 启动 ========== */
-  openDB().then(function () { return loadAllItems(); }).then(function (items) { currentItems = items; renderGrid(); if (currentItems.length > 0 && dropHint) dropHint.style.display = 'none'; }).catch(function (err) { console.error('作品库加载失败:', err); renderGrid(); });
+  openDB().then(function () { return loadAllItems(); }).then(function (items) {
+    // 为从 IndexedDB 恢复的 Blob 创建临时 URL
+    items.forEach(function (item) {
+      if (item.blob && !item._blobUrl) item._blobUrl = URL.createObjectURL(item.blob);
+    });
+    currentItems = items; renderGrid();
+    if (currentItems.length > 0 && dropHint) dropHint.style.display = 'none';
+  }).catch(function (err) { console.error('作品库加载失败:', err); renderGrid(); });
 })();

@@ -132,16 +132,23 @@
   navLinks.forEach(function (l) { var h = l.getAttribute('href'); if (h && h.startsWith('#')) { var t = document.getElementById(h.substring(1)); if (t) sections.push({ link: l, target: t }); } });
   function updateActiveNav() { var cur = null, sp = window.scrollY + 120; sections.forEach(function (s) { var t = s.target.offsetTop, b = t + s.target.offsetHeight; if (sp >= t && sp < b) cur = s.link; }); navLinks.forEach(function (l) { l.classList.remove('active'); }); if (cur) cur.classList.add('active'); }
 
-  /* ========== 统一滚动处理 ========== */
-  var navbar = document.getElementById('mainNav'), scrollTicking = false;
+  /* ========== 统一滚动处理（合并导航/进度/视差/显隐/回顶） ========== */
+  var navbar = document.getElementById('mainNav'), scrollTicking = false, lastScrollY = 0;
   window.addEventListener('scroll', function () {
-    if (!scrollTicking) { requestAnimationFrame(function () { updateActiveNav(); updateProgressBar(); updateParallax(); if (navbar) { if (window.scrollY > 50) navbar.classList.add('scrolled'); else navbar.classList.remove('scrolled'); } scrollTicking = false; }); scrollTicking = true; }
+    if (!scrollTicking) { requestAnimationFrame(function () {
+      var cur = window.scrollY, nh = navbar ? navbar.offsetHeight : 60;
+      updateActiveNav(); updateProgressBar(); updateParallax();
+      // 导航栏滚动样式
+      if (navbar) { if (cur > 50) navbar.classList.add('scrolled'); else navbar.classList.remove('scrolled'); }
+      // 导航显示/隐藏
+      if (cur > nh * 3) { if (cur > lastScrollY + 8 && navbar) navbar.style.transform = 'translateY(-100%)'; else if (cur < lastScrollY - 8 && navbar) navbar.style.transform = 'translateY(0)'; }
+      else { if (navbar) navbar.style.transform = 'translateY(0)'; }
+      // 回顶按钮
+      if (backBtn) { if (cur > 600) backBtn.classList.add('visible'); else backBtn.classList.remove('visible'); }
+      lastScrollY = cur; scrollTicking = false;
+    }); scrollTicking = true; }
   });
   updateActiveNav(); updateProgressBar();
-
-  /* ========== 导航显示/隐藏 ========== */
-  var lastScrollY = 0;
-  window.addEventListener('scroll', function () { var cur = window.scrollY, nh = navbar ? navbar.offsetHeight : 60; if (cur > nh * 3) { if (cur > lastScrollY + 8 && navbar) navbar.style.transform = 'translateY(-100%)'; else if (cur < lastScrollY - 8 && navbar) navbar.style.transform = 'translateY(0)'; } else { if (navbar) navbar.style.transform = 'translateY(0)'; } lastScrollY = cur; });
 
   /* ========== 折叠菜单自动收起 ========== */
   var nc = document.getElementById('navbarNav');
@@ -156,10 +163,6 @@
   backBtn.innerHTML = '<i class="bi bi-arrow-up"></i>';
   document.body.appendChild(backBtn);
 
-  window.addEventListener('scroll', function () {
-    if (window.scrollY > 600) backBtn.classList.add('visible');
-    else backBtn.classList.remove('visible');
-  });
   backBtn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
   /* ========== 下载按钮 ========== */

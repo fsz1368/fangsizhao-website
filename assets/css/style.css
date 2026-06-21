@@ -77,44 +77,6 @@ body {
   border-radius: 0 2px 2px 0;
 }
 
-/* ---------- 玻璃拟态 ---------- */
-.glass {
-  background: rgba(var(--accent-blue-rgb), 0.04) !important;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-
-[data-bs-theme="light"] .glass {
-  background: rgba(255, 255, 255, 0.6) !important;
-  border: 1px solid rgba(0, 0, 0, 0.06) !important;
-}
-
-/* ---------- 渐变边框动画 ---------- */
-.gradient-border {
-  position: relative;
-}
-
-.gradient-border::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(var(--accent-blue-rgb), 0.3), rgba(var(--accent-gold-rgb), 0.3), rgba(var(--accent-blue-rgb), 0.1));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  pointer-events: none;
-}
-
-.gradient-border:hover::before {
-  opacity: 1;
-}
-
 a {
   color: var(--accent-blue);
   transition: color 0.2s ease;
@@ -228,33 +190,16 @@ a:hover {
 }
 
 .hero-glow-1 {
-  width: 500px;
-  height: 500px;
+  width: 500px; height: 500px;
   background: var(--accent-blue);
-  top: -10%;
-  right: -10%;
-  animation: glowDrift1 12s ease-in-out infinite;
+  top: -10%; right: -10%;
+  /* 由 JS 视差统一驱动，避免 CSS animation 与 JS transform 冲突 */
 }
 
 .hero-glow-2 {
-  width: 400px;
-  height: 400px;
+  width: 400px; height: 400px;
   background: var(--accent-gold);
-  bottom: -5%;
-  left: -5%;
-  animation: glowDrift2 15s ease-in-out infinite;
-}
-
-@keyframes glowDrift1 {
-  0%, 100% { transform: translate(0, 0); }
-  33% { transform: translate(-60px, 40px); }
-  66% { transform: translate(-30px, -30px); }
-}
-
-@keyframes glowDrift2 {
-  0%, 100% { transform: translate(0, 0); }
-  33% { transform: translate(50px, -30px); }
-  66% { transform: translate(-20px, 50px); }
+  bottom: -5%; left: -5%;
 }
 
 /* 头像占位 */

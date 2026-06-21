@@ -25,6 +25,21 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%233B82F6'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='18' font-family='sans-serif' font-weight='bold'>方</text></svg>">
   <title>方思照 | 无人机 × 新媒体 双栖实践者</title>
 
+  <!-- 结构化数据 -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "方思照",
+    "description": "无人机技术 × 新媒体运营 双栖实践者",
+    "email": "mailto:744959529@qq.com",
+    "address": { "@type": "PostalAddress", "addressLocality": "恩施市", "addressRegion": "湖北省" },
+    "alumniOf": { "@type": "CollegeOrUniversity", "name": "长江大学工程技术学院" },
+    "knowsAbout": ["无人机测绘", "抖音运营", "航拍摄影", "数据分析"],
+    "url": "https://fz-deploy.vercel.app"
+  }
+  </script>
+
   <!-- Bootstrap 5.3 CSS -->
   <link href="assets/lib/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Icons -->
@@ -410,7 +425,7 @@
       </div>
 
       <!-- 上传进度条 -->
-      <div class="upload-progress" id="uploadProgress" style="display:none">
+      <div class="upload-progress" id="uploadProgress" style="display:none" role="status" aria-live="polite">
         <div class="upload-progress-bar" id="uploadProgressBar"></div>
         <span class="upload-progress-text" id="uploadProgressText">上传中...</span>
       </div>
@@ -424,12 +439,12 @@
       </div>
 
       <!-- 瀑布流网格 -->
-      <div class="masonry-grid" id="masonryGrid"></div>
+      <div class="masonry-grid" id="masonryGrid" role="region" aria-live="polite" aria-label="作品展示网格"></div>
 
       <!-- 全屏播放器 -->
-      <div class="lightbox" id="lightbox">
-        <button class="lightbox-close" id="lightboxClose"><i class="bi bi-x-lg"></i></button>
-        <button class="lightbox-delete" id="lightboxDelete"><i class="bi bi-trash"></i></button>
+      <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="媒体预览">
+        <button class="lightbox-close" id="lightboxClose" aria-label="关闭"><i class="bi bi-x-lg"></i></button>
+        <button class="lightbox-delete" id="lightboxDelete" aria-label="删除"><i class="bi bi-trash"></i></button>
         <div class="lightbox-content" id="lightboxContent"></div>
       </div>
     </div>

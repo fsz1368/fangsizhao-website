@@ -11,6 +11,7 @@
   var db = null;
   var currentItems = [];
   var currentLightboxId = null;
+  var lightboxTrigger = null; // 记住灯箱触发元素，用于关闭后返回焦点
   var currentFilter = 'all';
   var currentSort = 'newest';
   var uploadProgress = document.getElementById('uploadProgress');
@@ -325,12 +326,16 @@
   }
 
   /* ========== 分类筛选 ========== */
+  // 初始化筛选按钮 aria-pressed
   if (filterContainer) {
+    filterContainer.querySelectorAll('.filter-btn').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.classList.contains('active') ? 'true' : 'false');
+    });
     filterContainer.addEventListener('click', function (e) {
       var btn = e.target.closest('.filter-btn');
       if (!btn) return;
-      filterContainer.querySelectorAll('.filter-btn').forEach(function (b) { b.classList.remove('active'); });
-      btn.classList.add('active');
+      filterContainer.querySelectorAll('.filter-btn').forEach(function (b) { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-pressed', 'true');
       currentFilter = btn.getAttribute('data-filter');
       renderGrid();
     });
@@ -356,10 +361,34 @@
   function closeLightbox() { var v = lightboxContent.querySelector('video'); if (v) { v.pause(); v.src = ''; } lightboxContent.innerHTML = ''; lightbox.classList.remove('active'); currentLightboxId = null; document.body.style.overflow = ''; }
   function removeItem(id) { if (currentLightboxId === id) closeLightbox(); deleteItem(id).then(function () { currentItems = currentItems.filter(function (it) { return it.id !== id; }); renderGrid(); if (currentItems.length === 0 && dropHint) dropHint.style.display = ''; }); }
 
-  if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
-  if (lightboxDelete) lightboxDelete.addEventListener('click', function () { if (currentLightboxId) removeItem(currentLightboxId); });
+  if (lightboxClose) { lightboxClose.addEventListener('click', closeLightbox); lightboxClose.setAttribute('aria-label', '关闭'); }
+  if (lightboxDelete) { lightboxDelete.addEventListener('click', function () { if (currentLightboxId) removeItem(currentLightboxId); }); lightboxDelete.setAttribute('aria-label', '删除'); }
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox(); });
   if (lightbox) lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLightbox(); });
+
+  // 灯箱焦点管理：打开时移焦点，关闭时返回
+  var origOpen = openLightbox;
+  openLightbox = function (id) {
+    lightboxTrigger = document.activeElement;
+    origOpen(id);
+    if (lightboxClose) setTimeout(function () { lightboxClose.focus(); }, 100);
+  };
+  var origClose = closeLightbox;
+  closeLightbox = function () {
+    origClose();
+    if (lightboxTrigger) { setTimeout(function () { lightboxTrigger.focus(); lightboxTrigger = null; }, 100); }
+  };
+  // 焦点陷阱
+  if (lightbox) {
+    lightbox.addEventListener('keydown', function (e) {
+      if (e.key !== 'Tab' || !lightbox.classList.contains('active')) return;
+      var fb = lightbox.querySelectorAll('button, video');
+      if (!fb.length) return;
+      var f = fb[0], l = fb[fb.length - 1];
+      if (e.shiftKey && document.activeElement === f) { e.preventDefault(); l.focus(); }
+      else if (!e.shiftKey && document.activeElement === l) { e.preventDefault(); f.focus(); }
+    });
+  }
   // 仅阻止作品媒体元素的右键菜单，不影响页面其他区域
   document.addEventListener('contextmenu', function (e) { var el = e.target.closest('.masonry-item img, .masonry-item video, .lightbox-content img, .lightbox-content video'); if (el) e.preventDefault(); });
 

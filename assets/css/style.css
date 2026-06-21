@@ -50,6 +50,13 @@ html {
   scroll-behavior: smooth;
 }
 
+/* 焦点指示器（无障碍） */
+:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
